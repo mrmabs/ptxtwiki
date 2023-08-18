@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+ 
+<head>
+    <title>My Simple Personal Wiki</title>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+ 
+<style type="text/css">
+    div {
+	font-family: monospace, monospace;
+    }
+
+    .headtext {
+        background-color: #000;
+	color: #ffff;
+        border-radius: 0.25em;
+	font-family: monospace, monospace;
+        padding: 5px 10px 5px 10px; /* Making space around letters */
+    }
+
+    .nodec {
+	text-decoration: none;
+    }
+
+    .headline {
+	border-bottom: 5px solid #000;
+    }
+
+    .container {
+        background: lightblue;
+	max-width: 800px;
+	margin: 10px auto auto auto;
+	padding: 5px;
+    }
+
+    .ext {
+	color: green;
+    }
+</style>
+
+<script>
+
+async function getPage() {
+	try {
+		var filename = location.hash.substr(1);
+		if (filename === "") {
+			filename = "index";
+		} else {
+			document.title = filename;
+		}
+		let text_data = await downloadFile(filename);
+                var urls = text_data.replace(/[^\(\n]\b((https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim, ' <a class="ext" href="$1">$1</a>&rarr;');
+                var inlinked = urls.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a class="ext" href="$2">$1</a>&rarr;');
+                var outlinked = inlinked.replace(/\[([^\]]+)\]/g, '<a class="int" href="/?#$1">$1</a>');
+                var linked = outlinked.replace(/"[^"]+"|([A-Z][a-z]+[A-Z]\w*)/g, function(m, g1) {
+			if (!g1) return m;
+			else return '<a class="int" href="/?#' + g1 + '">' + g1 + '</a>';
+		});
+
+                //var linked = outlinked.replace(/"[^"]+"|([A-Z][a-z]+[A-Z]\w*)/g, '<a class="int" href="/?#$1">$1</a>');
+	        var html = linked.replace(/(\r\n|\r|\n)/g, '<br/>\n');
+		document.querySelector("#html-text").innerHTML = html;
+		//document.querySelector("#html-text").textContent = html;
+	}
+	catch(e) {
+		//alert(e.message);
+		document.querySelector("#html-text").innerHTML = e.message;
+	}
+}
+
+async function downloadFile(filename) {
+	let response = await fetch(filename+".txt");
+		
+	if(response.status != 200) {
+		throw new Error("404 Page Not Found");
+	}
+		
+	// read response stream as text
+	let text_data = await response.text();
+
+	return text_data;
+}
+
+window.onhashchange = function() {
+    getPage();
+}
+
+</script>
+
+</head>
+<body onload="getPage()" class="container">
+	<div class="headline"><a class="nodec" href="/"><span class="headtext">My Wiki</span></a></div><br/>
+	<div id="html-text"></div>
+</body>
+ 
+</html>

@@ -1,0 +1,11 @@
+Index
+
+This is a test file.
+
+This is a [Link].
+
+A link to [Duck Duck Go](https://www.duck.com).
+
+Also a link to Slashdot http://slashdot.org
+
+CamelCase wiki links.
