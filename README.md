@@ -7,7 +7,7 @@ This is intended to somewhat look like the Palm OS Memo Pad app, with inspiratio
 * CamelCase wiki style internal
 * Single square bracket internal
 
-This is not bug free and it is very quirky, over time I may change the text file format to have multiple files. I have a few goals:
+This is not bug free and it is very quirky, over time I may change the text file format to have multiple pages in a single file, in line with the export output from [J-Pilot](https://www.jpilot.org/). I have a few goals:
 * Keep the code and main web page very simple
 * Static files
 * Parse text files (or one text file with all pages)
